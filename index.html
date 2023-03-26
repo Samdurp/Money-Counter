@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" />
+<script src="js/js.js"></script>
+
+<body onload="initJS()">
+
+<h1>Realtime Money Counter</h1>
+<p>Watch how much money you're making in realtime you fucking nerd!</p>
+
+<select>Choose your currency:
+	<option value="usd">USD</option>
+	<option value="eur">EUR</option>
+	<option value="jpy">JPY</option>
+	<option value="gbp">GBP</option>
+	<option value="cad">CAD</option>
+</select>
+
+<br><br>
+
+<label>Pay type:</label>
+<input type="radio" class="moneyInputFieldRadio" name="moneyInputFieldRadio" value="wage">
+<label for="fname">Wage</label>
+<input type="radio" class="moneyInputFieldRadio" name="moneyInputFieldRadio" value="salary">
+<label for="lname">Salary</label>
+<br><br>
+
+<label>Amount: </label><input class="moneyInputField" id="moneyInputFieldWage">
+<br><br>
+<input type="submit" value="Start" id="moneyInputFieldSubmitBtn">
+
+<p id="moneyInputFieldFeedback"></p>
+
+<p id="realtimeMoneyCount"></p>
+<br>
+<p id="realtimeCount"></p>
+
+</body>
+</html>
