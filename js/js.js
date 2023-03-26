@@ -1,10 +1,14 @@
 // Time in hz that the count will increase. Likely don't need to go above 60
-const countFrequency = 60;
+const countUpdateFrequency = 60;
 
-const formatter = new Intl.NumberFormat('en-US', {
+// Used to format floats to be in a currency format
+const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
 });
+
+// TODO
+const workDayLength = 3;
 
 // Function that will run all init stuff on page load
 function initJS()
@@ -59,29 +63,58 @@ function confirmValidInputs(selectedPayType, inputtedPay)
         else if (selectedPayType == "salary")
             moneyInputFieldFeedback.innerText = `You selected a salary of $${inputtedPay} per year`;
 
+        // Disables input field and radio buttons so nothing can be changed one it starts
+        toggleInput(false);
+
         count(selectedPayType, inputtedPay);
     }
 }
 
 async function count(payType, pay)
 {
-    var startTime, endTime;
-    startTime = new Date();
-
     let count = 0;
+    timeCountSeconds();
+    while (true)
+    {
+        await sleep(1000);
+        if (payType == "wage")
+            count += ((pay/3600));
+        else if (payType == "salary")
+            count += ((pay/31536000)*3); // The multiplying by 3 makes it 8 hours for a workday. Add the ability to alter this.
+        realtimeMoneyCount.innerText = "Money made: " + currencyFormatter.format(count);
+    }
+}
+
+async function timeCountSeconds()
+{
+    realtimeCount.innerText = "Time elapsed: 00:00:00";
     let time = 0;
     while (true)
     {
         await sleep(1000);
         time++;
-        if (payType == "wage")
-            count += ((pay/3600));
-        realtimeMoneyCount.innerText = formatter.format(count);
-        realtimeCount.innerText = time;
+        realtimeCount.innerText = "Time elapsed: " + new Date(time * 1000).toISOString().slice(11, 19);
     }
 }
 
 function sleep(ms) 
 {
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function toggleInput(on)
+{
+    let radioButtons = document.getElementsByClassName("moneyInputFieldRadio");
+    if (on)
+    {
+        for(i = 0; i < radioButtons.length; i++)
+            radioButtons[i].disabled = false;
+        document.getElementById("moneyInputField").readOnly = false;
+    }
+    else if (!on)
+    {
+        for(i = 0; i < radioButtons.length; i++)
+            radioButtons[i].disabled = true;
+        document.getElementById("moneyInputField").readOnly = true;
+    }
 }
